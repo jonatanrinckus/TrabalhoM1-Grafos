@@ -14,72 +14,116 @@ namespace TrabalhoM1
         {
             while (true)
             {
+                if (AdjacenciaMatrix == null)
+                {
+                    Console.WriteLine("Opções:");
+                    Console.WriteLine("0: não orientado e não ponderado");
+                    Console.WriteLine("1: orientado e não ponderado");
+                    Console.WriteLine("2: não orientado e ponderado");
+                    Console.WriteLine("3: um grafo orientado e ponderado");
+
+
+                }
+                else
+                {
+                    Console.WriteLine("Opções:");
+                    Console.WriteLine("9: Novo Grafo");
+                    Console.WriteLine("A: Novo vertice");
+                    Console.WriteLine("X: Remove vertice");
+                    Console.WriteLine("O: Add Arco/Arresta");
+                    Console.WriteLine();
+                }
+
                 var key = Console.ReadKey();
+
                 if (key.Key == ConsoleKey.Escape) // sair
                     return;
 
-                if(key.Key == ConsoleKey.NumPad0 || key.Key == ConsoleKey.D0) // Cria um arco não orientado e não ponderado
-                    CriarGrafo(MatrixType.NOrientadoNPonderado);
-                else if (key.Key == ConsoleKey.NumPad1 || key.Key == ConsoleKey.D1) // Cria um arco orientado e não ponderado
-                    CriarGrafo(MatrixType.Orientado);
-                else if (key.Key == ConsoleKey.NumPad2 || key.Key == ConsoleKey.D2) // Cria um arco não orientado e ponderado
-                    CriarGrafo(MatrixType.Ponderado);
-                else if (key.Key == ConsoleKey.NumPad3 || key.Key == ConsoleKey.D3) // Cria um arco orientado e ponderado
-                    CriarGrafo(MatrixType.OrientadoPonderado);
-                else if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.Add) // Add Vertice
+                if (AdjacenciaMatrix == null)
                 {
-                    Console.WriteLine("Nome do vertice");
-                    AdjacenciaMatrix.Insert(Console.ReadLine());
+                    if (key.Key == ConsoleKey.NumPad0 || key.Key == ConsoleKey.D0) // Cria um grafo não orientado e não ponderado
+                        CriarGrafo(MatrixType.NOrientadoNPonderado);
+                    else if (key.Key == ConsoleKey.NumPad1 || key.Key == ConsoleKey.D1) // Cria um grafo orientado e não ponderado
+                        CriarGrafo(MatrixType.Orientado);
+                    else if (key.Key == ConsoleKey.NumPad2 || key.Key == ConsoleKey.D2) // Cria um grafo não orientado e ponderado
+                        CriarGrafo(MatrixType.Ponderado);
+                    else if (key.Key == ConsoleKey.NumPad3 || key.Key == ConsoleKey.D3) // Cria um grafo orientado e ponderado
+                        CriarGrafo(MatrixType.OrientadoPonderado);
+
                 }
-                else if (key.Key == ConsoleKey.X) // Remove Vertice
+
+                
+                if (AdjacenciaMatrix != null)
                 {
-                    Console.WriteLine("Nome do vertice");
-                    AdjacenciaMatrix.Remove(Console.ReadLine());
-                }
-                else if (key.Key == ConsoleKey.O) // Add Arco ou Arresta
-                {
-                    AdjacenciaMatrix.InsertArcoOrArresta();
-                }
-                else if (key.Key == ConsoleKey.V) // retorna Vertice
-                {
-                    Console.WriteLine("Nome do vertice:");
-                    var vertice = Console.ReadLine();
-                    var v = AdjacenciaMatrix.RetornaVertice(vertice);
-                    if(v == null)
-                        return;
-                    
-                    Console.Write(v.Name + " -> ");
-                    foreach (var item in v.Items)
+                    if (key.Key == ConsoleKey.NumPad9 || key.Key == ConsoleKey.D9) // Remove grafo
                     {
-                        Console.Write($"{item.Name} - {item.Peso}");
-                        if (v.Items.IndexOf(item) != v.Items.Count - 1)
-                            Console.Write(" | ");
+                        AdjacenciaMatrix = null;
                     }
-                }
-                else if (key.Key == ConsoleKey.E) // Verifica se existe arresta
-                {
-                    Console.WriteLine("Origem");
-                    var origem = Console.ReadLine();
-                    Console.WriteLine("Destino");
-                    var destino = Console.ReadLine();
-                    Console.WriteLine(AdjacenciaMatrix.ExisteArresta(origem, destino));
-                }
-                else if (key.Key == ConsoleKey.R) // Retorna arrestas
-                {
-                    Console.WriteLine("Nome do vertice:");
-                    var vertice = Console.ReadLine();
-                    var items = AdjacenciaMatrix.RetornaArresta(vertice);
-                    foreach (var item in items)
+                    else if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.Add) // Add Vertice
                     {
-                        Console.Write($"{item.Name} - {item.Peso}");
-                        if(items.IndexOf(item) != items.Count - 1)
-                            Console.Write(" | ");
+                        Console.WriteLine("Nome do vertice");
+                        AdjacenciaMatrix.Insert(Console.ReadLine());
                     }
+                    else if (key.Key == ConsoleKey.X) // Remove Vertice
+                    {
+                        Console.WriteLine("Nome do vertice");
+                        AdjacenciaMatrix.Remove(Console.ReadLine());
+                    }
+                    else if (key.Key == ConsoleKey.O) // Add Arco ou Arresta
+                    {
+                        AdjacenciaMatrix.InsertArcoOrArresta();
+                    }
+                    else if (key.Key == ConsoleKey.V) // retorna Vertice
+                    {
+                        Console.WriteLine("Nome do vertice:");
+                        var vertice = Console.ReadLine();
+                        var v = AdjacenciaMatrix.RetornaVertice(vertice);
+                        if (v == null)
+                            return;
+
+                        Console.Write(v.Name + " -> ");
+                        foreach (var item in v.Items)
+                        {
+                            Console.Write($"{item.Name} - {item.Peso}");
+                            if (v.Items.IndexOf(item) != v.Items.Count - 1)
+                                Console.Write(" | ");
+                        }
+                    }
+                    else if (key.Key == ConsoleKey.E) // Verifica se existe arresta
+                    {
+                        Console.WriteLine("Origem");
+                        var origem = Console.ReadLine();
+                        Console.WriteLine("Destino");
+                        var destino = Console.ReadLine();
+                        Console.WriteLine(AdjacenciaMatrix.ExisteArresta(origem, destino));
+                    }
+                    else if (key.Key == ConsoleKey.R) // Retorna arrestas
+                    {
+                        Console.WriteLine("Nome do vertice:");
+                        var vertice = Console.ReadLine();
+                        var items = AdjacenciaMatrix.RetornaArresta(vertice);
+                        foreach (var item in items)
+                        {
+                            Console.Write($"{item.Name} - {item.Peso}");
+                            if (items.IndexOf(item) != items.Count - 1)
+                                Console.Write(" | ");
+                        }
+                    }
+                    else if (key.Key == ConsoleKey.P)
+                    {
+                        AdjacenciaMatrix.Print();
+                    }
+                    else if (key.Key == ConsoleKey.B)
+                    {
+                        Console.WriteLine("Nome do vertice:");
+                        var vertice = Console.ReadLine();
+                        var v = AdjacenciaMatrix.RetornaVertice(vertice);
+                        AdjacenciaMatrix.BuscaBfs(v);
+                    }
+
                 }
-                else if(key.Key == ConsoleKey.P)
-                {
-                    AdjacenciaMatrix.Print();
-                }
+                
+                 
             }
         }
 
@@ -92,6 +136,7 @@ namespace TrabalhoM1
 
     class MatrixAdjacencia 
     {
+
         public MatrixAdjacencia(MatrixType type)
         {
             Type = type;
@@ -101,6 +146,55 @@ namespace TrabalhoM1
         public MatrixType Type { get; set; }
 
         public IList<Vertice> Vertices { get; set; }
+
+        public void BuscaBfs(Vertice vertice)
+        {
+            var verticesOrdened = Vertices.OrderBy(c => c.Name).ToList();
+
+            foreach (var vertex in verticesOrdened)
+            {
+                vertex.Items = vertex.Items.OrderBy(c => c.Name).ToList();
+            }
+            var visitados = new Queue<Vertice>();
+            var toVisit = new Stack<Vertice>();
+
+            while (verticesOrdened.Any())
+            {
+                Vertice next;
+                if (toVisit.Any())
+                {
+                    next = toVisit.Pop();
+                }
+                else
+                {
+                    next = verticesOrdened.FirstOrDefault(c => c.Name == vertice.Name) ?? verticesOrdened.FirstOrDefault();
+                }
+
+                verticesOrdened.Remove(next);
+
+                if (visitados.All(c => c.Name != next.Name))
+                {
+                    visitados.Enqueue(next);
+                }
+
+                foreach (var item in next.Items)
+                {
+                    if (visitados.All(c => c.Name != item.Name))
+                    {
+                        var i = verticesOrdened.FirstOrDefault(c => c.Name == item.Name);
+                        visitados.Enqueue(i);
+                        toVisit.Push(i);
+                    }
+                    
+                }
+            }
+            while (visitados.Any())
+            {
+                var item = visitados.Dequeue();
+                Console.Write(item.Name + " | ");
+            }
+            
+        }
 
         public void Print()
         {
