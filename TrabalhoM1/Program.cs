@@ -120,7 +120,33 @@ namespace TrabalhoM1
                         var v = AdjacenciaMatrix.RetornaVertice(vertice);
                         AdjacenciaMatrix.BuscaBfs(v);
                     }
-
+                    else if (key.Key == ConsoleKey.D)
+                    {
+                        Console.WriteLine("Nome do vertice:");
+                        var vertice = Console.ReadLine();
+                        Console.WriteLine("Nome do Destino:");
+                        var destino = Console.ReadLine();
+                        var v = AdjacenciaMatrix.RetornaVertice(vertice);
+                        var c = AdjacenciaMatrix.RetornaVertice(destino);
+                        AdjacenciaMatrix.BuscaBfs(v, c);
+                    }
+                    else if (key.Key == ConsoleKey.N)
+                    {
+                        Console.WriteLine("Nome do vertice:");
+                        var vertice = Console.ReadLine();
+                        var v = AdjacenciaMatrix.RetornaVertice(vertice);
+                        AdjacenciaMatrix.BuscaDfs(v);
+                    }
+                    else if (key.Key == ConsoleKey.F)
+                    {
+                        Console.WriteLine("Nome do vertice:");
+                        var vertice = Console.ReadLine();
+                        Console.WriteLine("Nome do Destino:");
+                        var destino = Console.ReadLine();
+                        var v = AdjacenciaMatrix.RetornaVertice(vertice);
+                        var c = AdjacenciaMatrix.RetornaVertice(destino);
+                        AdjacenciaMatrix.BuscaDfs(v, c);
+                    }
                 }
                 
                  
@@ -147,7 +173,7 @@ namespace TrabalhoM1
 
         public IList<Vertice> Vertices { get; set; }
 
-        public void BuscaBfs(Vertice vertice)
+        public void BuscaBfs(Vertice vertice, Vertice destino = null)
         {
             var verticesOrdened = Vertices.OrderBy(c => c.Name).ToList();
 
@@ -156,18 +182,23 @@ namespace TrabalhoM1
                 vertex.Items = vertex.Items.OrderBy(c => c.Name).ToList();
             }
             var visitados = new Queue<Vertice>();
-            var toVisit = new Stack<Vertice>();
+            var toVisit = new Queue<Vertice>();
 
             while (verticesOrdened.Any())
             {
                 Vertice next;
                 if (toVisit.Any())
                 {
-                    next = toVisit.Pop();
+                    next = toVisit.Dequeue();
                 }
                 else
                 {
                     next = verticesOrdened.FirstOrDefault(c => c.Name == vertice.Name) ?? verticesOrdened.FirstOrDefault();
+                }
+
+                if (destino != null && destino.Name == next?.Name)
+                {
+                    break;
                 }
 
                 verticesOrdened.Remove(next);
@@ -183,7 +214,7 @@ namespace TrabalhoM1
                     {
                         var i = verticesOrdened.FirstOrDefault(c => c.Name == item.Name);
                         visitados.Enqueue(i);
-                        toVisit.Push(i);
+                        toVisit.Enqueue(i);
                     }
                     
                 }
@@ -196,6 +227,57 @@ namespace TrabalhoM1
             
         }
 
+
+        public void BuscaDfs(Vertice vertice, Vertice destino = null)
+        {
+            var verticesOrdened = Vertices.OrderBy(c => c.Name).ToList();
+
+            foreach (var vertex in verticesOrdened)
+            {
+                vertex.Items = vertex.Items.OrderBy(c => c.Name).ToList();
+            }
+            var visitados = new Queue<Vertice>();
+            var notOut = true;
+            while (notOut && verticesOrdened.Any())
+            {
+                var next = verticesOrdened.FirstOrDefault(c => c.Name == vertice.Name) ?? verticesOrdened.FirstOrDefault();
+
+                if (next == null)
+                {
+                    break;
+                }
+                verticesOrdened.Remove(next);
+
+                if (visitados.All(c => c.Name != next.Name))
+                {
+                    visitados.Enqueue(next);
+                }
+
+                foreach (var item in next.Items)
+                {
+                    if(!notOut)
+                        break;
+
+                    if (visitados.All(c => c.Name != item.Name))
+                    {
+                        var i = verticesOrdened.FirstOrDefault(c => c.Name == item.Name);
+                        visitados.Enqueue(i);
+                        if (item.Name == destino?.Name)
+                        {
+                            notOut = false;
+                            break;
+                        }
+                    }
+
+                }
+            }
+            while (visitados.Any())
+            {
+                var item = visitados.Dequeue();
+                Console.Write(item.Name + " | ");
+            }
+
+        }
         public void Print()
         {
             Console.Clear();
